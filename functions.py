@@ -47,7 +47,9 @@ def click_image(location, con=0.9):
     spot = pyautogui.locateCenterOnScreen(location, confidence=con)
     if spot:
         # time.sleep(0.05)
-        pyautogui.click(spot)
+        pyautogui.moveTo(spot)
+        pyautogui.mouseDown()
+        pyautogui.mouseUp()
     return spot
 
 """Waits until the specified image appears on screen, throws exception

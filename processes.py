@@ -236,26 +236,21 @@ def choose_summoner_spells():
 "Goes into options and sets the necessary startup stuff"
 def game_start_setup():
     "Sets all to smartcast"
-    pyautogui.PAUSE = 0.1
+    pyautogui.PAUSE = 0.05
     click_image(screenshots_folder + "ingame" + sep + "settings.png", con=0.9)
-    pyautogui.click(button="left")
     print("click settings")
     time.sleep(1)
 
     click_image(screenshots_folder + "ingame" + sep + "hotkeys.png", con=0.9)
-    pyautogui.click(button="left")
     print("click hotkeys")
     time.sleep(1)
 
     click_image(screenshots_folder + "ingame" + sep + "quick_cast_all.png", con=0.9)
-    pyautogui.click(button="left")
     print("click quick_cast_all")
     time.sleep(1)
     print("set all to smartcast")
 
     "sets interface to minimal hud"
     click_image(screenshots_folder + "ingame" + sep + "interface.png", con=0.9)
-    pyautogui.scroll(100, x=pyautogui.position()[0] + int(screen_dim[0]/10),y=pyautogui.position()[1])
-
-time.sleep(2)
-game_start_setup()
+    pyautogui.moveTo((pyautogui.position()[0] + screen_dim[0]/10, pyautogui.position()[1]))
+    pyautogui.scroll(10000)

@@ -46,7 +46,8 @@ time.sleep(1)
 # pyautogui.screenshot(r"D:\Desktop\Programming\For_fun\LeagueBot\screenshots\pregame\foo.png", region=lower_half_screen)
 # print(pyautogui.locateOnScreen(screenshots_folder + "ingame" + sep + "okay.png", confidence=0.9))
 # game_start_setup()
-pyautogui.press("q")
+# print(screen_dim[0])
+
 
 
 "Accept games and sets up champ select"
