@@ -239,18 +239,23 @@ def game_start_setup():
     pyautogui.PAUSE = 0.05
     click_image(screenshots_folder + "ingame" + sep + "settings.png", con=0.9)
     print("click settings")
-    time.sleep(1)
 
     click_image(screenshots_folder + "ingame" + sep + "hotkeys.png", con=0.9)
     print("click hotkeys")
-    time.sleep(1)
 
     click_image(screenshots_folder + "ingame" + sep + "quick_cast_all.png", con=0.9)
     print("click quick_cast_all")
-    time.sleep(1)
     print("set all to smartcast")
 
     "sets interface to minimal hud"
     click_image(screenshots_folder + "ingame" + sep + "interface.png", con=0.9)
     pyautogui.moveTo((pyautogui.position()[0] + screen_dim[0]/10, pyautogui.position()[1]))
-    pyautogui.scroll(10000)
+    for i in range(20):
+        pyautogui.scroll(100)
+        time.sleep(0.1)
+    pyautogui.mouseDown()
+    pyautogui.mouseUp()
+    pyautogui.drag(-1*pyautogui.position()[0]*1/12, 0, 0.5, button="left")
+
+time.sleep(2)
+game_start_setup()
