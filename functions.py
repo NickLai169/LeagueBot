@@ -138,3 +138,15 @@ def check_if_appears(image, check_duration=10, con=1, reg=None):
 """
 def position(x_ratio, y_ratio):
     return (x_ratio*screen_dim, y_ratio*screen_dim)
+
+
+def tab_into_league():
+    icon_location = pyautogui.locateCenterOnScreen(screenshots_folder + "taskbar" + sep + "league_icon.PNG", confidence=0.9)
+    pyautogui.click(icon_location)
+
+def alt_tab():
+    pyautogui.keyDown('alt')
+    pyautogui.keyDown('tab')
+    pyautogui.keyUp('alt')
+    pyautogui.keyUp('tab')
+    pyautogui.mouseUp()

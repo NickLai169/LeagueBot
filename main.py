@@ -14,6 +14,21 @@ screen_dim = pyautogui.size()
 lower_half_screen = (0, int(screen_dim[1]/2), screen_dim[0], int(screen_dim[1]/2))
 centre_screen = (int(screen_dim[0]/3), int(screen_dim[1]/3), int(screen_dim[0]/3), int(screen_dim[1]/3))
 
+camera_positions = {1: (1707, 925),
+    2: (1714, 948),
+    3: (1780, 991),
+    4: (1998, 1021)
+    }
+
+camps = {
+    "b_gromp": [1, (334, 503)],
+    "b_blue": [1, (1466, 802)],
+    "b_wolves": [2, (1183, 886)],
+    "b_chickens": [3, (683, 95)],
+    "b_red": [3, (1322, 806)],
+    "b_krugs": [4, (1047, 540)],
+    }
+
 """
     [IMPORTANT NOTES]
     # Minimap scale must be at 100%

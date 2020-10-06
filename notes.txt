@@ -1,0 +1,16 @@
+DOCUMENTATION:
+puput - https://pypi.org/project/pynput/#description
+pyautogui - https://pyautogui.readthedocs.io/en/latest/index.html
+
+<<<<<< commit efdbf0cf3f99333ebac3e707cbe7dd008b0bcf70 >>>>>>
+I am now up to the bit where I need to set key bindings
+
+- Created Tester.py
+- Created notes.txt
+
+I realised that it might be important to create a side-program that logs keys and clicks
+and then saves it somewhere, allowing the user to access those exact keys and clicks
+in the future. I will probably initiate a side-project now.
+
+I realised that I need to be able to use keys and pyautogui is slightly too old
+and has some deprecated libraries. So I am using pydirectinput for key inputs
