@@ -1,9 +1,20 @@
 import pyautogui
+import pydirectinput
 import time
 import os
+import sys
+import winsound
+import ctypes
+import random
 
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.5
+
+from pynput.mouse import Button, Controller
+Mouse = Controller
+
+from pynput.keyboard import Key, Controller
+Keyboard = Controller
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sep = os.sep
@@ -12,6 +23,21 @@ screen_dim = pyautogui.size()
 
 lower_half_screen = (0, int(screen_dim[1]/2), screen_dim[0], int(screen_dim[1]/2))
 centre_screen = (int(screen_dim[0]/3), int(screen_dim[1]/3), int(screen_dim[0]/3), int(screen_dim[1]/3))
+
+camera_positions = {1: (1707, 925),
+    2: (1714, 948),
+    3: (1780, 991),
+    4: (1800, 1038),
+    }
+
+camps = {
+    "b_gromp": [1, (334, 503)],
+    "b_blue": [1, (1466, 802)],
+    "b_wolves": [2, (1183, 886)],
+    "b_chickens": [3, (683, 95)],
+    "b_red": [3, (1322, 806)],
+    "b_krugs": [4, (963, 89)],
+    }
 
 """sensor function determining the mouse position
     @param duration: How long the sensor function ought to print out the
@@ -124,7 +150,7 @@ def check_if_appears(image, check_duration=10, con=1, reg=None):
 
     been_found = False
     for i in range(check_duration):
-        print("######checking######")
+        print("######checking for {}######".format(image))
         if pyautogui.locateOnScreen(image, confidence=con, region=reg):
             been_found = True
             break;
@@ -140,13 +166,38 @@ def position(x_ratio, y_ratio):
     return (x_ratio*screen_dim, y_ratio*screen_dim)
 
 
-def tab_into_league():
-    icon_location = pyautogui.locateCenterOnScreen(screenshots_folder + "taskbar" + sep + "league_icon.PNG", confidence=0.9)
-    pyautogui.click(icon_location)
+def tab_into_league(tabbed_in = True):
+    icon_location = pyautogui.locateCenterOnScreen(screenshots_folder + "taskbar" + sep + "Capture.jpg", confidence=0.9)
+    if icon_location and tabbed_in:
+        # print("FOUND IT")
+        pyautogui.click(icon_location)
+        return True
+    else:
+        # print("Couldn't find it")
+        return False
 
-def alt_tab():
-    pyautogui.keyDown('alt')
-    pyautogui.keyDown('tab')
-    pyautogui.keyUp('alt')
-    pyautogui.keyUp('tab')
-    pyautogui.mouseUp()
+def left_click():
+    mouse_controller = Mouse()
+    mouse_controller.press(Button.left)
+    mouse_controller.release(Button.left)
+    time.sleep(0.1)
+
+def right_click():
+    mouse_controller = Mouse()
+    mouse_controller.press(Button.right)
+    mouse_controller.release(Button.right)
+    time.sleep(0.1)
+
+def do_camp(camp_name):
+    pyautogui.moveTo(camera_positions[camps[camp_name][0]])
+    left_click()
+    pyautogui.moveTo(camps[camp_name][1])
+    right_click()
+
+def alt_tab(perform=True):
+    if perform:
+        pyautogui.keyDown('alt')
+        pyautogui.keyDown('tab')
+        pyautogui.keyUp('alt')
+        pyautogui.keyUp('tab')
+        pyautogui.mouseUp()

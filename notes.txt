@@ -14,3 +14,17 @@ in the future. I will probably initiate a side-project now.
 
 I realised that I need to be able to use keys and pyautogui is slightly too old
 and has some deprecated libraries. So I am using pydirectinput for key inputs
+
+
+<<<<<<<<{{{ commit f123aa868b4fd2e8591046a46fee4439d52791a7 }}}>>>>>>>>
+pyautogui has the bug where it wouldn't release the keys. I will resolve this
+issue using pynput, will need to rework framework of everyhing later.
+
+SUMMARY:
+- Locating stuff and moving the mouse there: pyautogui
+  - This is because pyautogui actually supports locating via image
+- Pressing keys on the keyboard: pydirectinput
+  - This is beccause pynput is unable to actually input keystrokes into league
+- Mouse clicks: pyinput
+  - This is because pyautogui is unable to release mousekeys when pressed.
+These are the best ways to do things

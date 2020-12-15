@@ -1,6 +1,7 @@
 import pyautogui
 import time
 import os
+from functions import *
 
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.5
@@ -102,9 +103,18 @@ def login(username="lamaboti", password="iamabot1"):
 
 "Set ups a game from the home-screen"
 def start_queue():
+    if not check_if_appears(screenshots_folder + "pregame" + sep + "play_button.png", con=0.9,check_duration=2):
+        print("tabbing into league")
+        icon_location = pyautogui.locateCenterOnScreen(screenshots_folder + "pregame" + sep + "league_client.PNG", confidence=0.9)
+        pyautogui.click(icon_location)
+    else:
+        print("league already opened")
     print("====> setting up queue...")
     "Clicks the play/party button in the top-right"
-    wait_until_appears(screenshots_folder + "pregame" + sep + "play_button.png", con=0.9, wait_duration=40)
+    play_buttons = [screenshots_folder + "pregame" + sep + "play_button.png"]
+    play_buttons.append(screenshots_folder + "pregame" + sep + "party_play_button.PNG")
+    play_buttons.append(screenshots_folder + "pregame" + sep + "party_play_button_grey.PNG")
+    wait_until_one_appears(play_buttons, con=0.9, wait_duration=40)
     start_button = pyautogui.locateCenterOnScreen(screenshots_folder + "pregame" + sep + "play_button.png")
 
     if not start_button:
@@ -130,8 +140,8 @@ def find_match():
     time.sleep(3)
     wait_until_appears(screenshots_folder + "pregame" + sep + "find_match_button.png", con=0.5)
     click_image(screenshots_folder + "pregame" + sep + "find_match_button.png", con=0.5)
-    wait_until_appears(screenshots_folder + "pregame" + sep + "accept_button.png", wait_duration=40, con=0.9)
-    spot = click_image(screenshots_folder + "pregame" + sep + "accept_button.png", con=0.9)
+    wait_until_appears(screenshots_folder + "pregame" + sep + "accept_button.jpg", wait_duration=40, con=0.8)
+    spot = click_image(screenshots_folder + "pregame" + sep + "accept_button.jpg", con=0.8)
     print("Accept button located at: " + str(spot))
     if spot:
         print("====> Match accepted...")
@@ -147,11 +157,12 @@ def find_match():
     if pyautogui.locateOnScreen(in_queue, confidence=0.9, region= lower_half_screen):
         print("====> Some fuckwit declined (ಠ ∩ಠ)")
         find_match()
-    elif not pyautogui.locateOnScreen(lock_in_button, confidenceq=0.9, region= lower_half_screen):
+    elif not pyautogui.locateOnScreen(lock_in_button, confidence=0.9, region= lower_half_screen):
         raise Exception("Something went wrong during queue-time!")
 
 "Picks a champion"
 def pick_champ():
+    pyautogui.PAUSE = 0.1
     print("====> Selecting champion...")
     wait_until_appears(screenshots_folder + "champ_select" + sep + "lock_in(grey).png", con=0.8)
     lock_in_loc = pyautogui.locateCenterOnScreen(screenshots_folder + "champ_select" + sep + "lock_in(grey).png", confidence=0.8)
@@ -159,7 +170,7 @@ def pick_champ():
     time.sleep(0.2)
     for i in range(1, 20):
         print("Looking at champion " + str(i))
-        select_champ = pyautogui.locateCenterOnScreen(screenshots_folder + "champ_select" + sep + str(i) + ".png", confidence=0.8)
+        select_champ = pyautogui.locateCenterOnScreen(screenshots_folder + "champ_select" + sep + str(i) + ".png", confidence=0.95)
         if select_champ:
             pyautogui.click(select_champ)
             time.sleep(1)
@@ -168,6 +179,9 @@ def pick_champ():
             if not pyautogui.locateCenterOnScreen(screenshots_folder + "champ_select" + sep + "lock_in(blue).png", confidence=0.8):
                 print("Locked in champion " + str(i))
                 break;
+    pyautogui.PAUSE = 0.5
+
+
 "Sets the runes to the optimal for this strategy"
 def set_runes():
     time.sleep(1)
@@ -258,6 +272,3 @@ def game_start_setup():
     pyautogui.mouseDown()
     pyautogui.mouseUp()
     pyautogui.drag(-1*pyautogui.position()[0]*1/12, 0, 0.5, button="left")
-
-time.sleep(2)
-game_start_setup()

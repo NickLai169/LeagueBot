@@ -6,6 +6,14 @@ import sys
 from functions import *
 import winsound
 import ctypes
+import random
+
+from pynput.mouse import Button, Controller
+Mouse = Controller
+
+from pynput.keyboard import Key, Controller
+Keyboard = Controller
+
 
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.5
@@ -17,21 +25,6 @@ screen_dim = pyautogui.size()
 
 lower_half_screen = (0, int(screen_dim[1]/2), screen_dim[0], int(screen_dim[1]/2))
 centre_screen = (int(screen_dim[0]/3), int(screen_dim[1]/3), int(screen_dim[0]/3), int(screen_dim[1]/3))
-
-camera_positions = {1: (1707, 925),
-    2: (1714, 948),
-    3: (1780, 991),
-    4: (1800, 1038),
-    }
-
-camps = {
-    "b_gromp": [1, (334, 503)],
-    "b_blue": [1, (1466, 802)],
-    "b_wolves": [2, (1183, 886)],
-    "b_chickens": [3, (683, 95)],
-    "b_red": [3, (1322, 806)],
-    "b_krugs": [4, (963, 89)],
-    }
 
 """
 [Helper functions]
@@ -47,7 +40,7 @@ def do_wolves(t=160):
         winsound.Beep(frequency, duration)
         time.sleep(1)
         print("Doing wolves...")
-        tab_into_league()
+        tabbed_in = tab_into_league()
 
         time.sleep(0.5)
         pyautogui.PAUSE = 0.25
@@ -57,124 +50,135 @@ def do_wolves(t=160):
         pyautogui.click(x=1183, y=886, button='right')
 
         pyautogui.PAUSE = 0.05
-        alt_tab()
+        alt_tab(tabbed_in)
 
         pyautogui.moveTo(original_pos)
         pyautogui.PAUSE = 0.5
         time.sleep(abs(t-5))
 
 def attack_move(position):
-    prev_pause = pydirectinput.PAUSE
-    pydirectinput.PAUSE = 0.1
-    print(position)
+    keyboard_controller = Keyboard()
+    mouse_controller = Mouse()
+    prev_pause = pyautogui.PAUSE
+    pyautogui.PAUSE = 0.05
+
     pydirectinput.keyDown("x")
     pydirectinput.keyUp("x")
-    print("pressed x")
+    pyautogui.moveTo(position)
+    mouse_controller.press(Button.left)
+    mouse_controller.release(Button.left)
+    pyautogui.PAUSE = prev_pause
 
-    pyautogui.mouseDown(position, button="left")
-    pyautogui.mouseUp(position, button="left")
-
-    pydirectinput.PAUSE = prev_pause
-
-def do_camps():
+def do_jungle(pause=60, i_beep = True):
     frequency = 440
     duration = 300
+    random.seed()
+
+    def beep():
+        if i_beep:
+            winsound.Beep(frequency, duration)
+            time.sleep(0.2)
+            winsound.Beep(frequency, duration)
+            time.sleep(1)
+
+    tabbed_in = True
     while True:
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
+        # pyautogui.PAUSE = 0.2
+        beep()
 
         "Clears Gromp"
-        tab_into_league()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
-        pyautogui.click(camera_positions[1])
-        pyautogui.click(camps["b_gromp"][1], button="right")
+        pyautogui.moveTo(camera_positions[camps["b_gromp"][0]])
+        left_click()
+        do_camp("b_gromp")
+        pyautogui.moveTo(camera_positions[camps["b_blue"][0]])
+        left_click()
         attack_move(camps["b_blue"][1])
 
-        alt_tab()
-        pyautogui.moveTo(original_pos)
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
 
         "Clears Blue"
-        time.sleep(60)
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
-        time.sleep(1)
-        tab_into_league()
+        time.sleep(pause + random.uniform(-5, 10))
+        beep()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
 
-        pyautogui.click(camps["b_blue"][1], button="right")
-        pyautogui.click(camera_positions[camps["b_wolves"][0]], button="left")
+        pyautogui.moveTo(camera_positions[camps["b_blue"][0]])
+        left_click()
+        do_camp("b_blue")
+        pyautogui.moveTo(camera_positions[camps["b_wolves"][0]])
+        left_click()
         attack_move(camps["b_wolves"][1])
 
-        alt_tab()
-        pyautogui.moveTo(original_pos)
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
 
         "Clears Wolves"
-        time.sleep(60)
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
-        time.sleep(1)
-        tab_into_league()
+        time.sleep(pause + random.uniform(-5, 10))
+        beep()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
 
-        pyautogui.click(camps["b_wolves"][1], button="right")
-        pyautogui.click(camera_positions[3])
-
+        do_camp("b_wolves")
+        pyautogui.moveTo(camera_positions[camps["b_chickens"][0]])
+        left_click()
         attack_move(camps["b_chickens"][1])
 
-        alt_tab()
-        pyautogui.moveTo(original_pos)
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
 
         "Clears chickens"
-        time.sleep(60)
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
-        time.sleep(1)
-        tab_into_league()
+        time.sleep(pause + random.uniform(-5, 10))
+        beep()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
 
-        pyautogui.click(camps["b_chickens"][1], button="right")
+        do_camp("b_chickens")
+        pyautogui.moveTo(camera_positions[camps["b_chickens"][0]])
+        left_click()
+        pyautogui.moveTo(camera_positions[camps["b_red"][0]])
+        left_click()
         attack_move(camps["b_red"][1])
 
-        alt_tab()
-        pyautogui.moveTo(original_pos)
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
 
         "Clears Red"
-        time.sleep(60)
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
-        time.sleep(1)
-        tab_into_league()
+        time.sleep(pause + random.uniform(-5, 10))
+        beep()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
 
-        pyautogui.click(camps["b_red"][1], button="right")
-        pyautogui.click(camera_positions[camps["b_krugs"][0]], button="left")
-
+        pyautogui.moveTo(camera_positions[camps["b_red"][0]])
+        left_click()
+        do_camp("b_red")
+        pyautogui.moveTo(camera_positions[camps["b_krugs"][0]])
+        left_click()
         attack_move(camps["b_krugs"][1])
 
-        alt_tab()
-        pyautogui.moveTo(original_pos)
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
 
         "Clears Krugs"
-        time.sleep(60)
-        winsound.Beep(frequency, duration)
-        time.sleep(0.2)
-        winsound.Beep(frequency, duration)
-        time.sleep(1)
-        tab_into_league()
+        time.sleep(pause + random.uniform(-5, 10))
+        beep()
+        tabbed_in = tab_into_league()
         original_pos = pyautogui.position()
 
-        pyautogui.click(camps["b_krugs"][1], button="right")
-        pyautogui.click(camera_positions[camps["b_gromp"][0]], button="left")
+        pyautogui.moveTo(camera_positions[camps["b_krugs"][0]])
+        left_click()
+        do_camp("b_krugs")
+        pyautogui.moveTo(camera_positions[camps["b_gromp"][0]])
+        left_click()
         attack_move(camps["b_gromp"][1])
         pyautogui.PAUSE = 0.5
 
-        time.sleep(60)
-
+        alt_tab(tabbed_in)
+        # pyautogui.moveTo(original_pos)
+        time.sleep(pause + random.uniform(-5, 10))
+        # pyautogui.PAUSE = 0.5
 
 def listen_tool(t=300):
     from pynput.mouse import Listener as mouse_listener
@@ -219,29 +223,25 @@ def goto_each():
 """
 [TESTING BEGINS]
 """
+if __name__ == "__main__":
 
-# do_wolves()
+    # do_wolves()
 
-# listen_tool()
+    # listen_tool()
 
-# goto_each()
+    # goto_each()
 
-# do_camps()
+    do_jungle(60, i_beep = False)
+    # do_camp("b_gromp")
 
-time.sleep(2)
-
-attack_move(pyautogui.position())
-
-
+    # tab_into_league()
 
 
-# time.sleep(2)
+    # time.sleep(2)
 
-# pyautogui.keyUp("alt")
-# pyautogui.click(button="right")
+    # pyautogui.keyUp("alt")
+    # pyautogui.click(button="right")
 
 
-# def main():
-#     do_wolves()
-# if __name__ == "__main__":
-#     main()
+    # def main():
+    #     do_wolves()

@@ -56,13 +56,15 @@ from processes import choose_summoner_spells
 "Goes into options and sets the necessary startup stuff"
 from processes import game_start_setup
 
-#marker
-time.sleep(1)
-# pyautogui.screenshot(r"D:\Desktop\Programming\For_fun\LeagueBot\screenshots\pregame\foo.png", region=lower_half_screen)
-# print(pyautogui.locateOnScreen(screenshots_folder + "ingame" + sep + "okay.png", confidence=0.9))
-# game_start_setup()
-# print(screen_dim[0])
-
+"""
+Startings looking for a game.
+"""
+def play_game(num=1):
+    print("IAMHERE")
+    start_queue()
+    for i in range(num):
+        start_game()
+        break
 
 
 "Accept games and sets up champ select"
@@ -71,22 +73,9 @@ def start_game():
     pick_champ()
     set_runes()
     choose_summoner_spells()
-    wait_until_appears(screenshots_folder + "ingame" + sep + "game_start_score.png", con=0.9)
+    wait_until_appears(screenshots_folder + "ingame" + sep + "game_start_score.png", con=0.9, wait_duration=300)
+
 
 # "===================[MAIN FUNCTION(S)]==================="
-# def play_game(num=1):
-#     start_queue()
-#     for i in range(num):
-#         start_game()
-#
-# def main():
-#     "Starts my bot"
-#     initiation()
-#     login()
-#
-#     play_game()
-#
-#
-# if __name__ == "__main__":
-#     main()
-#     print(">>>>>>>>>[DONE]<<<<<<<<<")
+if __name__ == "__main__":
+    play_game()
